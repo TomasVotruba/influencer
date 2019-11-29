@@ -7,6 +7,7 @@ namespace Rector\Influencer\FileInfluencer;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClearPlatformComposerVersionInfluencer
 {
@@ -20,9 +21,9 @@ final class ClearPlatformComposerVersionInfluencer
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function processComposerJsonFile(string $composerJsonFilePath): void
+    public function processComposerJsonFile(SmartFileInfo $composerJsonFileInfo): void
     {
-        $composerJsonContent = FileSystem::read($composerJsonFilePath);
+        $composerJsonContent = $composerJsonFileInfo->getContents();
         $composerJson = Json::decode($composerJsonContent, Json::FORCE_ARRAY);
         $originalComposerJson = $composerJson;
 
@@ -36,7 +37,7 @@ final class ClearPlatformComposerVersionInfluencer
         }
 
         $newComposerJsonFileContent = Json::encode($composerJson, Json::PRETTY);
-        FileSystem::write($composerJsonFilePath, $newComposerJsonFileContent);
+        FileSystem::write($composerJsonFileInfo->getRealPath(), $newComposerJsonFileContent);
 
         $this->symfonyStyle->note('Platform config wa removed from "composer.json"');
     }

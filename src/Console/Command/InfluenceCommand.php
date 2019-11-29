@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InfluenceCommand extends Command
 {
@@ -84,15 +85,17 @@ final class InfluenceCommand extends Command
             throw new ShouldNotHappenException(sprintf('File "%s" was not found', $composerJsonFilePath));
         }
 
+        $composerJsonSmartFileInfo = new SmartFileInfo($composerJsonFilePath);
+
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(
-            $composerJsonFilePath,
+            $composerJsonSmartFileInfo,
             'symfony',
             '3.4'
         );
 
         // 3. bump PHP to ^7.1
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(
-            $composerJsonFilePath,
+            $composerJsonSmartFileInfo,
             'php',
             '7.2'
         );

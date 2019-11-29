@@ -8,6 +8,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FrameworkComposerVersionInfluencer
 {
@@ -27,15 +28,11 @@ final class FrameworkComposerVersionInfluencer
     }
 
     public function updateRequirementsByVendorToVersion(
-        string $composerJsonFilePath,
+        SmartFileInfo $composerJsonFileInfo,
         string $targetPackage,
         string $targetVersion
     ): void {
-        if (! file_exists($composerJsonFilePath)) {
-            $this->symfonyStyle->error(sprintf('File %s was not found', $composerJsonFilePath));
-        }
-
-        $composerJsonContent = FileSystem::read($composerJsonFilePath);
+        $composerJsonContent = $composerJsonFileInfo->getContents();
         $composerJson = Json::decode($composerJsonContent, Json::FORCE_ARRAY);
         $originalComposerJson = $composerJson;
 
@@ -48,7 +45,7 @@ final class FrameworkComposerVersionInfluencer
         }
 
         $newComposerJsonFileContent = Json::encode($composerJson, Json::PRETTY);
-        FileSystem::write($composerJsonFilePath, $newComposerJsonFileContent);
+        FileSystem::write($composerJsonFileInfo->getRealPath(), $newComposerJsonFileContent);
 
         $this->symfonyStyle->note(sprintf(
             'Composer dependency allowed version "%s" for "%s/*" packages',

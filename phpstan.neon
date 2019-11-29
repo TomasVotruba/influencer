@@ -1,2 +1,7 @@
 parameters:
     level: max
+
+    ignoreErrors:
+        - '#Cannot cast array<string>\|string\|null to string#'
+        # cache bug
+        - '#Parameter \#1 \$file of static method Nette\\Utils\\FileSystem::write\(\) expects string, string\|false given#'

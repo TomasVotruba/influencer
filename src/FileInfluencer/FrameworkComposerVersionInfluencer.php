@@ -40,21 +40,7 @@ final class FrameworkComposerVersionInfluencer
         $originalComposerJson = $composerJson;
 
         // update composer.json
-        $sections = self::REQUIRE_SECTIONS;
-
-        foreach ($sections as $section) {
-            if (! isset($composerJson[$section])) {
-                continue;
-            }
-
-            foreach ($composerJson[$section] as $package => $version) {
-                if (! $this->isPackageMatch($package, $targetPackage, $version, $targetVersion)) {
-                    continue;
-                }
-
-                $composerJson[$section][$package] = '^' . $targetVersion;
-            }
-        }
+        $composerJson = $this->processSections($targetPackage, $targetVersion, $composerJson);
 
         // nothing has changed
         if ($originalComposerJson === $composerJson) {
@@ -71,8 +57,30 @@ final class FrameworkComposerVersionInfluencer
         ));
     }
 
-    private function isPackageMatch(string $currentPackage, string $targetPackage, string $version, string $targetVersion): bool
+    private function processSections(string $targetPackage, string $targetVersion, $composerJson)
     {
+        foreach (self::REQUIRE_SECTIONS as $section) {
+            if (! isset($composerJson[$section])) {
+                continue;
+            }
+
+            foreach ($composerJson[$section] as $package => $version) {
+                if (! $this->isPackageMatch($package, $targetPackage, $version, $targetVersion)) {
+                    continue;
+                }
+
+                $composerJson[$section][$package] = '^' . $targetVersion;
+            }
+        }
+        return $composerJson;
+    }
+
+    private function isPackageMatch(
+        string $currentPackage,
+        string $targetPackage,
+        string $version,
+        string $targetVersion
+    ): bool {
         if ($targetPackage === 'symfony') {
             // polyfill packages have different package versionining
             if (Strings::match($currentPackage, '#^symfony\/polyfill#')) {

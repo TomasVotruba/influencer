@@ -83,7 +83,11 @@ final class InfluenceCommand extends Command
             $this->symfonyStyle->error(sprintf('File "%s" was not found', $composerJsonFilePath));
         }
 
-        $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath, 'symfony', '3.4');
+        $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(
+            $composerJsonFilePath,
+            'symfony',
+            '3.4'
+        );
 
         // 3. bump PHP to ^7.1
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(

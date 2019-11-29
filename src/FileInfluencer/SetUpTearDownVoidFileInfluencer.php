@@ -15,6 +15,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SetUpTearDownVoidFileInfluencer
 {
     /**
+     * @var string
+     */
+    private const SETUP_TEARDOWN_WITHOUT_VOID = '#(function\s(setUp|tearDown)\(\))\n#i';
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -23,11 +28,6 @@ final class SetUpTearDownVoidFileInfluencer
     {
         $this->symfonyStyle = $symfonyStyle;
     }
-
-    /**
-     * @var string
-     */
-    private const SETUP_TEARDOWN_WITHOUT_VOID = '#(function\s(setUp|tearDown)\(\))\n#i';
 
     public function influenceFile(SmartFileInfo $smartFileInfo): void
     {

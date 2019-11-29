@@ -4,6 +4,8 @@ parameters:
         - "clean-code"
         - "php71"
         - "php70"
+        - "symplify"
+        - "common"
 
     skip:
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: ~

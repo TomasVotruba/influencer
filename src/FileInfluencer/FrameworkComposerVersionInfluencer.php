@@ -50,8 +50,7 @@ final class FrameworkComposerVersionInfluencer
                     continue;
                 }
 
-                $newDesiredVersion = $version . '|^' . $targetVersion;
-                $composerJson[$section][$package] = $newDesiredVersion;
+                $composerJson[$section][$package] = '^' . $targetVersion;
             }
         }
 
@@ -72,7 +71,7 @@ final class FrameworkComposerVersionInfluencer
 
     private function isPackageMatch(string $currentPackage, string $targetPackage, string $version, string $targetVersion): bool
     {
-        if (Strings::contains($version, $targetVersion)) {
+        if ($version === '^' . $targetVersion) {
             return false;
         }
 

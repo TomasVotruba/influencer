@@ -67,7 +67,7 @@ final class InfluenceCommand extends Command
 
         // 3. bump PHP to ^7.1
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath,
-            'php', '7.1');
+            'php', '7.2');
 
         $this->symfonyStyle->success('Done!');
 

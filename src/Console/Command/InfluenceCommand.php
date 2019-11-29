@@ -2,8 +2,8 @@
 
 namespace Rector\Influencer\Console\Command;
 
-use Nette\Utils\Json;
 use Rector\Influencer\Configuration\Option;
+use Rector\Influencer\FileInfluencer\ClearPlatformComposerVersionInfluencer;
 use Rector\Influencer\FileInfluencer\FrameworkComposerVersionInfluencer;
 use Rector\Influencer\FileInfluencer\SetUpTearDownVoidFileInfluencer;
 use Symfony\Component\Console\Command\Command;
@@ -27,19 +27,27 @@ final class InfluenceCommand extends Command
      * @var SetUpTearDownVoidFileInfluencer
      */
     private $setUpTearDownVoidFileInfluencer;
+
     /**
      * @var FrameworkComposerVersionInfluencer
      */
     private $frameworkComposerVersionInfluencer;
 
+    /**
+     * @var ClearPlatformComposerVersionInfluencer
+     */
+    private $clearPlatformComposerVersionInfluencer;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         SetUpTearDownVoidFileInfluencer $setUpTearDownVoidFileInfluencer,
-        FrameworkComposerVersionInfluencer $frameworkComposerVersionInfluencer
+        FrameworkComposerVersionInfluencer $frameworkComposerVersionInfluencer,
+        ClearPlatformComposerVersionInfluencer $clearPlatformComposerVersionInfluencer
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->setUpTearDownVoidFileInfluencer = $setUpTearDownVoidFileInfluencer;
         $this->frameworkComposerVersionInfluencer = $frameworkComposerVersionInfluencer;
+        $this->clearPlatformComposerVersionInfluencer = $clearPlatformComposerVersionInfluencer;
 
         parent::__construct();
     }
@@ -63,11 +71,18 @@ final class InfluenceCommand extends Command
 
         // 2. bump composer.json symfony/* to ^3.4
         $composerJsonFilePath = $directory . '/composer.json';
+        if (! file_exists($composerJsonFilePath)) {
+            $this->symfonyStyle->error(sprintf('File "%s" was not found', $composerJsonFilePath));
+        }
+
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath, 'symfony', '3.4');
 
         // 3. bump PHP to ^7.1
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath,
             'php', '7.2');
+
+        // 4. remove config platform
+        $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonFilePath);
 
         $this->symfonyStyle->success('Done!');
 

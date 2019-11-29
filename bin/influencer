@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+// Require Composer autoload.php
+use Rector\Influencer\Console\InfluencerApplication;
+use Rector\Influencer\HttpKernel\InfluencerKernel;
+use Symfony\Component\Console\Application;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+$influencerKernel = new InfluencerKernel('dev', true);
+$influencerKernel->boot();
+
+$container = $influencerKernel->getContainer();
+
+/** @var InfluencerApplication $influencerApplication */
+$influencerApplication = $container->get(InfluencerApplication::class);
+$influencerApplication->run();
+
+// 1. add setUp()/tearDown() void types
+
+
+// 2. bump composer.json symfony to 3.4

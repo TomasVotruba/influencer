@@ -1,0 +1,19 @@
+{
+    "name": "rector/influencer",
+    "require": {
+        "php": "^7.2",
+        "nette/utils": "^3.0",
+        "symfony/finder": "^5.0",
+        "symfony/http-kernel": "^5.0",
+        "symfony/console": "^5.0",
+        "symfony/config": "^5.0",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/yaml": "^5.0",
+        "symplify/package-builder": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\Influencer\\": "src"
+        }
+    }
+}

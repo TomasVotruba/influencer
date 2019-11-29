@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    Symfony\Component\Console\Application: null
+
+    Rector\Influencer\:
+        resource: '../src'
+        exclude: '../src/HttpKernel/InfluencerKernel.php'

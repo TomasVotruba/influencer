@@ -4,8 +4,10 @@ services:
         autowire: true
         autoconfigure: true
 
-    Symfony\Component\Console\Application: null
-
     Rector\Influencer\:
         resource: '../src'
         exclude: '../src/HttpKernel/InfluencerKernel.php'
+
+    Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory: null
+    Symfony\Component\Console\Style\SymfonyStyle:
+        factory: ['@Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']

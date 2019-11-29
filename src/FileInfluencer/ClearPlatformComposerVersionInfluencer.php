@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Influencer\FileInfluencer;
 
@@ -28,9 +30,9 @@ final class ClearPlatformComposerVersionInfluencer
             return;
         }
 
-        unset($originalComposerJson['config']['platform']);
-        if (count($originalComposerJson['config']) === 0) {
-            unset($originalComposerJson['config']);
+        unset($composerJson['config']['platform']);
+        if (count($composerJson['config']) === 0) {
+            unset($composerJson['config']);
         }
 
         $newComposerJsonFileContent = Json::encode($composerJson, Json::PRETTY);

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Influencer\Console\Command;
 
@@ -52,7 +54,7 @@ final class InfluenceCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->addArgument(Option::SOURCE, InputArgument::REQUIRED, 'Application root destination');
@@ -78,8 +80,11 @@ final class InfluenceCommand extends Command
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath, 'symfony', '3.4');
 
         // 3. bump PHP to ^7.1
-        $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath,
-            'php', '7.2');
+        $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(
+            $composerJsonFilePath,
+            'php',
+            '7.2'
+        );
 
         // 4. remove config platform
         $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonFilePath);

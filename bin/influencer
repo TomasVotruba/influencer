@@ -6,7 +6,6 @@ use Rector\Influencer\HttpKernel\InfluencerKernel;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
 $influencerKernel = new InfluencerKernel('dev', true);
 $influencerKernel->boot();
 

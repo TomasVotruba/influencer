@@ -71,6 +71,13 @@ final class FrameworkComposerVersionInfluencer
 
     private function isPackageMatch(string $currentPackage, string $targetPackage, string $version, string $targetVersion): bool
     {
+        if ($targetPackage === 'symfony') {
+            // polyfill packages have different package versionining
+            if (Strings::match($currentPackage, '#^symfony\/polyfill#')) {
+                return false;
+            }
+        }
+
         if ($version === '^' . $targetVersion) {
             return false;
         }

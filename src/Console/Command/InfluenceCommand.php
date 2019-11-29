@@ -101,7 +101,7 @@ final class InfluenceCommand extends Command
         );
 
         // 4. remove config platform
-        $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonFilePath);
+        $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonSmartFileInfo);
 
         // 5. remove dead packages
         $packagesToRemove = ['willdurand/oauth-server-bundle'];

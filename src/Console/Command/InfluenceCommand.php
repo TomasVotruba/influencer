@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Influencer\Console\Command;
 
 use Rector\Influencer\Configuration\Option;
+use Rector\Influencer\Exception\ShouldNotHappenException;
 use Rector\Influencer\FileInfluencer\ClearPlatformComposerVersionInfluencer;
 use Rector\Influencer\FileInfluencer\FrameworkComposerVersionInfluencer;
 use Rector\Influencer\FileInfluencer\SetUpTearDownVoidFileInfluencer;
@@ -80,7 +81,7 @@ final class InfluenceCommand extends Command
         // 2. bump composer.json symfony/* to ^3.4
         $composerJsonFilePath = $directory . '/composer.json';
         if (! file_exists($composerJsonFilePath)) {
-            $this->symfonyStyle->error(sprintf('File "%s" was not found', $composerJsonFilePath));
+            throw new ShouldNotHappenException(sprintf('File "%s" was not found', $composerJsonFilePath));
         }
 
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion(
@@ -98,6 +99,12 @@ final class InfluenceCommand extends Command
 
         // 4. remove config platform
         $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonFilePath);
+
+        // 5. remove dead packages
+        $packagesToRemove = ['willdurand/oauth-server-bundle'];
+
+        dump($packagesToRemove);
+        die;
 
         $this->symfonyStyle->success('Done!');
 

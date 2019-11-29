@@ -61,10 +61,11 @@ final class InfluenceCommand extends Command
             $this->setUpTearDownVoidFileInfluencer->influenceFile($fileInfo);
         }
 
-        // 2. bump composer.json symfony to 3.4
+        // 2. bump composer.json symfony/* to ^3.4
         $composerJsonFilePath = $directory . '/composer.json';
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath, 'symfony', '3.4');
 
+        // 3. bump PHP to ^7.1
         $this->frameworkComposerVersionInfluencer->updateRequirementsByVendorToVersion($composerJsonFilePath,
             'php', '7.1');
 

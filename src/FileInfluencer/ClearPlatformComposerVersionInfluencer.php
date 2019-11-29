@@ -39,6 +39,6 @@ final class ClearPlatformComposerVersionInfluencer
         $newComposerJsonFileContent = Json::encode($composerJson, Json::PRETTY);
         FileSystem::write($composerJsonFileInfo->getRealPath(), $newComposerJsonFileContent);
 
-        $this->symfonyStyle->note('Platform config wa removed from "composer.json"');
+        $this->symfonyStyle->note('Platform config was removed from "composer.json"');
     }
 }

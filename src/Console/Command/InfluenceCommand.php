@@ -8,6 +8,7 @@ use Rector\Influencer\Configuration\Option;
 use Rector\Influencer\Exception\ShouldNotHappenException;
 use Rector\Influencer\FileInfluencer\ClearPlatformComposerVersionInfluencer;
 use Rector\Influencer\FileInfluencer\FrameworkComposerVersionInfluencer;
+use Rector\Influencer\FileInfluencer\RemovePackagesFromComposerInfluencer;
 use Rector\Influencer\FileInfluencer\SetUpTearDownVoidFileInfluencer;
 use Rector\Influencer\Finder\PhpFileFinder;
 use Symfony\Component\Console\Command\Command;
@@ -46,20 +47,27 @@ final class InfluenceCommand extends Command
      */
     private $phpFileFinder;
 
+    /**
+     * @var RemovePackagesFromComposerInfluencer
+     */
+    private $removePackagesFromComposerInfluencer;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         PhpFileFinder $phpFileFinder,
         SetUpTearDownVoidFileInfluencer $setUpTearDownVoidFileInfluencer,
         FrameworkComposerVersionInfluencer $frameworkComposerVersionInfluencer,
-        ClearPlatformComposerVersionInfluencer $clearPlatformComposerVersionInfluencer
+        ClearPlatformComposerVersionInfluencer $clearPlatformComposerVersionInfluencer,
+        RemovePackagesFromComposerInfluencer $removePackagesFromComposerInfluencer
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->setUpTearDownVoidFileInfluencer = $setUpTearDownVoidFileInfluencer;
         $this->frameworkComposerVersionInfluencer = $frameworkComposerVersionInfluencer;
         $this->clearPlatformComposerVersionInfluencer = $clearPlatformComposerVersionInfluencer;
+        $this->phpFileFinder = $phpFileFinder;
+        $this->removePackagesFromComposerInfluencer = $removePackagesFromComposerInfluencer;
 
         parent::__construct();
-        $this->phpFileFinder = $phpFileFinder;
     }
 
     protected function configure(): void
@@ -71,7 +79,6 @@ final class InfluenceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $directory = (string) $input->getArgument(Option::SOURCE);
-
         $phpFiles = $this->phpFileFinder->findInDirectory($directory);
 
         // 1. add setUp()/tearDown() void types
@@ -105,9 +112,10 @@ final class InfluenceCommand extends Command
 
         // 5. remove dead packages
         $packagesToRemove = ['willdurand/oauth-server-bundle'];
-
-        dump($packagesToRemove);
-        die;
+        $this->removePackagesFromComposerInfluencer->processComposerJsonFile(
+            $composerJsonSmartFileInfo,
+            $packagesToRemove
+        );
 
         $this->symfonyStyle->success('Done!');
 

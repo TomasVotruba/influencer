@@ -111,7 +111,12 @@ final class InfluenceCommand extends Command
         $this->clearPlatformComposerVersionInfluencer->processComposerJsonFile($composerJsonSmartFileInfo);
 
         // 5. remove dead packages
-        $packagesToRemove = ['willdurand/oauth-server-bundle'];
+        $packagesToRemove = [
+            // dead
+            'willdurand/oauth-server-bundle',
+            // deprecated since 3.0
+            'symfony/security-acl',
+        ];
         $this->removePackagesFromComposerInfluencer->processComposerJsonFile(
             $composerJsonSmartFileInfo,
             $packagesToRemove

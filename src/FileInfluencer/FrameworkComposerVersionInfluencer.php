@@ -64,10 +64,12 @@ final class FrameworkComposerVersionInfluencer
 
                 // special fucked up version https://github.com/symfony/swiftmailer-bundle/pull/297/files
                 if ($package === 'symfony/swiftmailer-bundle') {
-                    $targetVersion = '3.3';
+                    $currentTargetVersion = '3.3';
+                } else {
+                    $currentTargetVersion = $targetVersion;
                 }
 
-                $composerJson[$section][$package] = '^' . $targetVersion;
+                $composerJson[$section][$package] = '^' . $currentTargetVersion;
             }
         }
         return $composerJson;

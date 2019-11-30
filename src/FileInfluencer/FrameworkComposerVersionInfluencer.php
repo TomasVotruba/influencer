@@ -7,16 +7,12 @@ namespace Rector\Influencer\FileInfluencer;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use Rector\Influencer\ValueObject\ComposerJsonSection;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FrameworkComposerVersionInfluencer
 {
-    /**
-     * @var string[]
-     */
-    private const REQUIRE_SECTIONS = ['require', 'require-dev'];
-
     /**
      * @var SymfonyStyle
      */
@@ -56,7 +52,7 @@ final class FrameworkComposerVersionInfluencer
 
     private function processSections(string $targetPackage, string $targetVersion, $composerJson)
     {
-        foreach (self::REQUIRE_SECTIONS as $section) {
+        foreach (ComposerJsonSection::REQUIRES as $section) {
             if (! isset($composerJson[$section])) {
                 continue;
             }
@@ -64,6 +60,11 @@ final class FrameworkComposerVersionInfluencer
             foreach ($composerJson[$section] as $package => $version) {
                 if (! $this->isPackageMatch($package, $targetPackage, $version, $targetVersion)) {
                     continue;
+                }
+
+                // special fucked up version https://github.com/symfony/swiftmailer-bundle/pull/297/files
+                if ($package === 'symfony/swiftmailer-bundle') {
+                    $targetVersion = '3.3';
                 }
 
                 $composerJson[$section][$package] = '^' . $targetVersion;

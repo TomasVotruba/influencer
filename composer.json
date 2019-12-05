@@ -9,11 +9,21 @@
         "symfony/config": "^5.0",
         "symfony/dependency-injection": "^5.0",
         "symfony/yaml": "^5.0",
-        "symplify/package-builder": "^7.0"
+        "symplify/package-builder": "^7.0",
+        "symplify/smart-file-system": "^7.0"
+    },
+    "require-dev": {
+        "symplify/easy-coding-standard": "^7.0",
+        "phpstan/phpstan-shim": "^0.11.19"
     },
     "autoload": {
         "psr-4": {
             "Rector\\Influencer\\": "src"
         }
+    },
+    "scripts": {
+        "check-cs": "ecs check bin src --ansi",
+        "fix-cs": "ecs check bin src --fix --ansi",
+        "phpstan": "phpstan analyse bin src --ansi"
     }
 }
